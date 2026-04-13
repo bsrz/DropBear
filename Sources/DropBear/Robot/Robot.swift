@@ -13,7 +13,10 @@ public protocol Robot {
 extension Robot {
     /// Waits for the provided amount of time before continuing with the test
     public func wait(_ duration: TimeInterval) -> Self {
-        Thread.sleep(forTimeInterval: duration)
+        let deadline = Date(timeIntervalSinceNow: duration)
+        while Date() < deadline {
+            CFRunLoopRunInMode(.defaultMode, 0.01, true)
+        }
         return self
     }
 }

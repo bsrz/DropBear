@@ -51,9 +51,9 @@ public struct ElementSet<each T: RawRepresentable> where repeat (each T).RawValu
 
 ## Phase 3: Modernize Polling
 
-- [ ] Replace CFRunLoop + DispatchSource in `DropBear.poll()` with modern approach
-- [ ] Consider async/await version (caveat: XCTest UI testing runs synchronously on main thread — may need sync version as primary)
-- [ ] Replace `Thread.sleep()` in `Robot.wait()` with `Task.sleep` where async context available
+- [x] Replace CFRunLoop + DispatchSource in `DropBear.poll()` with modern approach
+- [x] Consider async/await version (caveat: XCTest UI testing runs synchronously on main thread — kept sync with simplified run loop spin)
+- [x] Replace `Thread.sleep()` in `Robot.wait()` with run loop spin (async not viable — `@MainActor` sync context)
 
 ## Phase 4: Update Springboard for Modern iOS
 
