@@ -1,8 +1,8 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension XCUIElement {
     /// Clears the text from the element
-    public func clearText(file: StaticString = #file, line: UInt = #line) {
+    public func clearText(file: StaticString = #filePath, line: UInt = #line) {
         guard let anyValue = value else { return }
 
         guard let value = anyValue as? String else {

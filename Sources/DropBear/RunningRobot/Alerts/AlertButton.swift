@@ -1,5 +1,6 @@
-import XCTest
+@preconcurrency import XCTest
 
+@MainActor
 public protocol AlertButton: RawRepresentable {
     func buttonElement(from alert: XCUIElement) -> XCUIElement
 }

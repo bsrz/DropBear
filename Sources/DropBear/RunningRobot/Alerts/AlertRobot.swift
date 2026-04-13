@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public class AlertRobot<Alert: AlertType, Previous: Robot>: RestrictedRobotBase, Robot {
     let previous: Previous

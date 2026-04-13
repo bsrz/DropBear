@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension XCUIApplication {
     public func launchForTesting() {

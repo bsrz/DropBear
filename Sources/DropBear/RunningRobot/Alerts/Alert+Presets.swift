@@ -4,6 +4,7 @@ public enum ContactAlertButton: String, AlertButton {
 }
 
 extension Alert {
+    @MainActor
     public static var contactsPermission: Alert<ContactAlertButton> {
         return .init(
             source: { _ in Springboard.application },

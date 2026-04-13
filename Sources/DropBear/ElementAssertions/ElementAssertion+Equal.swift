@@ -14,7 +14,7 @@ extension ElementAssertion {
     }
 }
 
-public protocol UITestEquatable {
+public protocol UITestEquatable: Sendable {
     var stringValues: [String] { get }
 }
 

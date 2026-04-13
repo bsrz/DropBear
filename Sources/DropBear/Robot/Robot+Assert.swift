@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public protocol Assertable { }
 
@@ -8,7 +8,7 @@ extension Robot where Self: Assertable {
         _ element: Element,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(element, in: hierarchy, [assertion], file: file, line: line)
@@ -19,7 +19,7 @@ extension Robot where Self: Assertable {
         _ element: Element,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion, _ rest: ElementAssertion...,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(element, in: hierarchy, [assertion] + rest, file: file, line: line)
@@ -30,7 +30,7 @@ extension Robot where Self: Assertable {
         _ element: Element,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertions: [ElementAssertion],
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         element
@@ -45,7 +45,7 @@ extension Robot where Self: Assertable {
         _ elements: [Element],
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(elements, in: hierarchy, [assertion], file: file, line: line)
@@ -56,7 +56,7 @@ extension Robot where Self: Assertable {
         _ elements: [Element],
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion, _ rest: ElementAssertion...,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(elements, in: hierarchy, [assertion] + rest, file: file, line: line)
@@ -67,7 +67,7 @@ extension Robot where Self: Assertable {
         _ elements: [Element],
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertions: [ElementAssertion],
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         let allElements = elements.map { $0.element(in: source, hierarchy: hierarchy, file: file, line: line) }

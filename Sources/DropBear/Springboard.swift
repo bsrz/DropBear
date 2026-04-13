@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension Springboard.DeleteAppButton {
     public static var `default`: Springboard.DeleteAppButton {
@@ -56,10 +56,11 @@ extension Springboard.DeleteAppButton {
     public static var iOS15: Springboard.DeleteAppButton { iOS14 }
 }
 
+@MainActor
 public enum Springboard {
     static let application = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
-    public static func deleteApp(named name: String, using strategy: DeleteAppButton = .default, required: Bool = false, file: StaticString = #file, line: UInt = #line) {
+    public static func deleteApp(named name: String, using strategy: DeleteAppButton = .default, required: Bool = false, file: StaticString = #filePath, line: UInt = #line) {
         let icon = application.icons[name]
         let iconAvailable = icon.waitForExistence(timeout: DropBear.defaultWaitTime) && icon.isHittable
 
@@ -92,8 +93,8 @@ public enum Springboard {
 }
 
 extension Springboard {
-    public struct DeleteAppButton {
-        public typealias Input = (_ application: XCUIApplication, _ icon: XCUIElement) -> Bool
+    public struct DeleteAppButton: @unchecked Sendable {
+        public typealias Input = @MainActor @Sendable (_ application: XCUIApplication, _ icon: XCUIElement) -> Bool
 
         let delete: Input
 

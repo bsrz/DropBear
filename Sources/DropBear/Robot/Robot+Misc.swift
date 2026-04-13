@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public protocol Actionable { }
 
@@ -7,7 +7,7 @@ extension Robot where Self: Actionable {
         _ element: Element,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         to position:  CGFloat,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         element

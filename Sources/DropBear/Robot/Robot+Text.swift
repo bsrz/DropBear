@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension Robot where Self: Actionable {
     public func type(
@@ -7,7 +7,7 @@ extension Robot where Self: Actionable {
         text: String,
         tapFirst: Bool = true,
         clearFirst: Bool = true,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         let element = element.element(in: source, hierarchy: hierarchy, file: file, line: line)
@@ -21,7 +21,7 @@ extension Robot where Self: Actionable {
     public func clearText(
         _ element: Element,
         in hierarchy: [XCUIElement.ElementType] = [.any],
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         element

@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public struct Alert<Button: AlertButton> {
     public typealias Source = (_ current: XCUIElement) -> XCUIElement

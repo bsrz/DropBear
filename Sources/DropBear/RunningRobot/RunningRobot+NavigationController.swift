@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public enum NoNavigationElement { }
 
@@ -44,7 +44,7 @@ extension RunningRobot { //} where Context: TabBarItemContext {
 }
 
 extension RunningRobot where Context: NavigationControllerContext {
-    public func popNavigationController(file: StaticString = #file, line: UInt = #line) -> Previous {
+    public func popNavigationController(file: StaticString = #filePath, line: UInt = #line) -> Previous {
         if source.navigationBars.buttons.count == 0 {
             XCTFail("Unable to find a navigation button", file: file, line: line)
         }
