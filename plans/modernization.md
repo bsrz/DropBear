@@ -69,10 +69,10 @@ public struct ElementSet<each T: RawRepresentable> where repeat (each T).RawValu
 
 ## Phase 6: Drop CocoaPods
 
-- [ ] Remove `DropBear.podspec`
-- [ ] Remove `DropBearGen.podspec`
-- [ ] Remove `DropBearSupport.podspec`
-- [ ] SPM as sole distribution method
+- [x] Remove `DropBear.podspec`
+- [x] Remove `DropBearGen.podspec`
+- [x] Remove `DropBearSupport.podspec`
+- [x] SPM as sole distribution method
 
 ## Phase 7: Misc Cleanup
 
