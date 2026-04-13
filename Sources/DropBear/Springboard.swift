@@ -2,58 +2,52 @@
 
 extension Springboard.DeleteAppButton {
     public static var `default`: Springboard.DeleteAppButton {
-        return .init { application, icon in
-            return iOS14.delete(application, icon) || iOS13.delete(application, icon) || iOS12.delete(application, icon)
+        Springboard.DeleteAppButton { app, icon in
+            iOS26.delete(app, icon) || iOS18.delete(app, icon)
         }
     }
 
-    public static var iOS12: Springboard.DeleteAppButton {
+    public static var iOS17: Springboard.DeleteAppButton {
         return .init { application, icon in
-            // find X
-            let iconFrame = icon.frame
-            let iconDeleteOffset = CGVector(
-                dx: (iconFrame.minX + 3) / application.frame.maxX,
-                dy: (iconFrame.minY + 3) / application.frame.maxY
-            )
+            icon.press(forDuration: 1.0)
 
-            application
-                .coordinate(withNormalizedOffset: iconDeleteOffset)
-                .tap()
+            let removeButton = application.buttons["Remove App"]
+            guard removeButton.waitForExistence(timeout: DropBear.defaultWaitTime) && removeButton.isHittable else { return false }
+            removeButton.tap()
+
+            let deleteAppButton = application.alerts.buttons["Delete App"]
+            guard deleteAppButton.waitForExistence(timeout: DropBear.defaultWaitTime) && deleteAppButton.isHittable else { return false }
+            deleteAppButton.tap()
+
+            let confirmButton = application.alerts.buttons["Delete"]
+            guard confirmButton.waitForExistence(timeout: DropBear.defaultWaitTime) && confirmButton.isHittable else { return false }
+            confirmButton.tap()
 
             return true
         }
     }
 
-    public static var iOS13: Springboard.DeleteAppButton {
-        return .init { application, _ in
-            let button = application.buttons["Delete App"]
+    public static var iOS18: Springboard.DeleteAppButton { iOS17 }
 
-            guard button.waitForExistence(timeout: DropBear.defaultWaitTime) && button.isHittable else { return false }
-
-            button.tap()
-            return true
-        }
-    }
-
-    public static var iOS14: Springboard.DeleteAppButton {
+    public static var iOS26: Springboard.DeleteAppButton {
         return .init { application, icon in
-            let button = application.buttons["Remove App"]
+            icon.press(forDuration: 1.5)
 
-            guard button.waitForExistence(timeout: DropBear.defaultWaitTime) && button.isHittable else { return false }
+            let removeButton = application.buttons["Remove App"].firstMatch
+            guard removeButton.waitForExistence(timeout: DropBear.defaultWaitTime) && removeButton.isHittable else { return false }
+            removeButton.tap()
 
-            button.tap()
+            let deleteAppButton = application.buttons["Delete App"].firstMatch
+            guard deleteAppButton.waitForExistence(timeout: DropBear.defaultWaitTime) && deleteAppButton.isHittable else { return false }
+            deleteAppButton.tap()
 
-            let deleteButton = application.alerts.buttons["Delete App"]
-
-            guard button.waitForExistence(timeout: DropBear.defaultWaitTime) && button.isHittable else { return false }
-
-            deleteButton.tap()
+            let confirmButton = application.buttons["Delete"].firstMatch
+            guard confirmButton.waitForExistence(timeout: DropBear.defaultWaitTime) && confirmButton.isHittable else { return false }
+            confirmButton.tap()
 
             return true
         }
     }
-
-    public static var iOS15: Springboard.DeleteAppButton { iOS14 }
 }
 
 @MainActor
@@ -71,23 +65,10 @@ public enum Springboard {
             return XCTFail("Application icon named '\(name)' not found.", file: file, line: line)
         }
 
-        // Long press
-        icon.press(forDuration: 1.5)
-
-        // Start deletion
         guard strategy.delete(application, icon) else {
-            return XCTFail("Failed to tap the app icons delete button.", file: file, line: line)
+            return XCTFail("Failed to delete the app.", file: file, line: line)
         }
 
-        // Confirm
-        let deleteButton = application.alerts.buttons["Delete"]
-        let deleteButtonAvailable = deleteButton.waitForExistence(timeout: DropBear.defaultWaitTime) && deleteButton.isHittable
-
-        guard deleteButtonAvailable else {
-            return XCTFail("Failed to confirm the delete.", file: file, line: line)
-        }
-
-        deleteButton.tap()
         XCUIDevice.shared.press(.home)
     }
 }

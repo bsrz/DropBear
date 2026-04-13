@@ -57,9 +57,9 @@ public struct ElementSet<each T: RawRepresentable> where repeat (each T).RawValu
 
 ## Phase 4: Update Springboard for Modern iOS
 
-- [ ] Drop iOS 12/13 strategies (minimum now iOS 16)
-- [ ] Add iOS 16/17/18 delete strategies
-- [ ] Fix bug: `Springboard.swift:48` checks `button.waitForExistence` instead of `deleteButton.waitForExistence`
+- [x] Drop iOS 12/13 strategies (minimum now iOS 16)
+- [x] Add iOS 16/17/18 delete strategies
+- [x] Fix bug: `Springboard.swift:48` checks `button.waitForExistence` instead of `deleteButton.waitForExistence`
 
 ## Phase 5: Modernize DropBearGen
 

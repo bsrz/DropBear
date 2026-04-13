@@ -9,9 +9,9 @@ class Tests: UITest {
             .assert(.label, .isEqual(to: "Undecided"))
             .tap(.button)
             .alert(.contactsPermission)
-            .tap(.ok)
-            .alert(.contactsPermission, required: false)
-            .tap(.ok)
+            .tap(.continue)
+            .alert(.contactsSharing, required: false)
+            .tap(.shareAll)
             .assert(.label, .isEqual(to: "Allowed"))
     }
     func testSwitch() {
