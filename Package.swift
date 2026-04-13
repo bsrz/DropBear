@@ -15,24 +15,20 @@ let package = Package(
         // Library
         .target(
             name: "DropBear",
-            exclude: ["Info.plist", "DropBear.h"],
             linkerSettings: [.linkedFramework("XCTest")]
         ),
         .testTarget(
             name: "DropBearTests",
-            dependencies: ["DropBear"],
-            exclude: ["Info.plist"]
+            dependencies: ["DropBear"]
         ),
 
         // App Support
         .target(
-            name: "DropBearSupport",
-            exclude: ["Info.plist", "DropBearSupport.h"]
+            name: "DropBearSupport"
         ),
         .testTarget(
             name: "DropBearSupportTests",
-            dependencies: ["DropBearSupport"],
-            exclude: ["Info.plist"]
+            dependencies: ["DropBearSupport"]
         ),
     ]
 )
