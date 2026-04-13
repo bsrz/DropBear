@@ -21,7 +21,7 @@ public struct Path {
     /// The underlying string representation
     internal var path: String
 
-    internal static var fileManager = FileManager.default
+    nonisolated(unsafe) internal static var fileManager = FileManager.default
 
     internal var fileSystemInfo: FileSystemInfo = DefaultFileSystemInfo()
 
@@ -577,7 +577,7 @@ extension Path {
             let matchc = gt.gl_matchc
             #endif
             return (0..<Int(matchc)).compactMap { index in
-                if let path = String(validatingUTF8: gt.gl_pathv[index]!) {
+                if let path = String(validatingCString: gt.gl_pathv[index]!) {
                     return Path(path)
                 }
 
@@ -597,15 +597,15 @@ extension Path {
 
 // MARK: SequenceType
 extension Path : Sequence {
-    public struct DirectoryEnumerationOptions : OptionSet {
+    public struct DirectoryEnumerationOptions : OptionSet, Sendable {
         public let rawValue: UInt
         public init(rawValue: UInt) {
             self.rawValue = rawValue
         }
 
-        public static var skipsSubdirectoryDescendants = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants.rawValue)
-        public static var skipsPackageDescendants = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsPackageDescendants.rawValue)
-        public static var skipsHiddenFiles = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles.rawValue)
+        public static let skipsSubdirectoryDescendants = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsSubdirectoryDescendants.rawValue)
+        public static let skipsPackageDescendants = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsPackageDescendants.rawValue)
+        public static let skipsHiddenFiles = DirectoryEnumerationOptions(rawValue: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles.rawValue)
     }
 
     /// Represents a path sequence with specific enumeration options

@@ -1,5 +1,5 @@
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
 public final class SyntaxExtractor: Extractor {
     // MARK: - Lifecycle
@@ -10,7 +10,8 @@ public final class SyntaxExtractor: Extractor {
         guard file.extension == "swift" else { return [] }
 
         let visitor = Visitor()
-        let syntax = try SyntaxParser.parse(file.url)
+        let source = try String(contentsOf: file.url, encoding: .utf8)
+        let syntax = Parser.parse(source: source)
         visitor.walk(syntax)
         return visitor.pairs
     }
@@ -19,9 +20,13 @@ public final class SyntaxExtractor: Extractor {
 private class Visitor: SyntaxVisitor {
     var pairs: [AccessibilityIdentifierPair] = []
 
+    init() {
+        super.init(viewMode: .sourceAccurate)
+    }
+
     override func visitPost(_ node: MemberAccessExprSyntax) {
         guard
-            node.name.text == "accessibilityIdentifier",
+            node.declName.baseName.text == "accessibilityIdentifier",
             let pair = extractUIKit(node) ?? extractSwiftUI(node)
             else { return }
 
@@ -30,21 +35,22 @@ private class Visitor: SyntaxVisitor {
 
     private func extractSwiftUI(_ node: MemberAccessExprSyntax) -> AccessibilityIdentifierPair? {
         guard
-            let tuple = node.parent?._syntaxNode.firstSearchingDown(of: TupleExprElementListSyntax.self),
-            let value = tuple._syntaxNode.firstSearchingDown(of: StringSegmentSyntax.self)?.content.text,
-            let enclosingView = node._syntaxNode.firstSearchingUp(of: StructDeclSyntax.self)
+            let tuple = node.parent?.firstSearchingDown(of: LabeledExprListSyntax.self),
+            let value = Syntax(tuple).firstSearchingDown(of: StringSegmentSyntax.self)?.content.text,
+            let enclosingView = Syntax(node).firstSearchingUp(of: StructDeclSyntax.self)
             else { return nil }
 
-        return .init(parent: enclosingView.identifier.text, identifier: value)
+        return .init(parent: enclosingView.name.text, identifier: value)
     }
+
     private func extractUIKit(_ node: MemberAccessExprSyntax) -> AccessibilityIdentifierPair? {
         guard
-            let expression = node.parent?.as(ExprListSyntax.self),
-            let value = expression._syntaxNode.firstSearchingDown(of: StringSegmentSyntax.self)?.content.text,
-            let enclosingClass = node._syntaxNode.firstSearchingUp(of: ClassDeclSyntax.self)
+            let infixExpr = node.parent?.as(InfixOperatorExprSyntax.self),
+            let value = Syntax(infixExpr).firstSearchingDown(of: StringSegmentSyntax.self)?.content.text,
+            let enclosingClass = Syntax(node).firstSearchingUp(of: ClassDeclSyntax.self)
             else { return nil }
 
-        return .init(parent: enclosingClass.identifier.text, identifier: value)
+        return .init(parent: enclosingClass.name.text, identifier: value)
     }
 }
 
@@ -64,7 +70,7 @@ extension Syntax {
             }
             queue.removeFirst()
 
-            queue.append(contentsOf: item.children.map { $0 })
+            queue.append(contentsOf: item.children(viewMode: .sourceAccurate).map { $0 })
         }
 
         return nil

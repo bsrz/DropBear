@@ -63,8 +63,8 @@ public struct ElementSet<each T: RawRepresentable> where repeat (each T).RawValu
 
 ## Phase 5: Modernize DropBearGen
 
-- [ ] Update SwiftSyntax `0.50600.1` → `600.0.1` (API completely different)
-- [ ] Drop `lib_InternalSwiftSyntaxParser` binary framework — no longer needed
+- [x] Update SwiftSyntax `0.50600.1` → `600.0.1` (API completely different)
+- [x] Drop `lib_InternalSwiftSyntaxParser` binary framework — no longer needed
 - [ ] Consider converting to Swift Package Plugin instead of standalone CLI
 
 ## Phase 6: Drop CocoaPods
