@@ -24,7 +24,7 @@ public class RunningRobot<Configuration, Context: RobotContext, Current: Robot, 
     }
 
     public required convenience init(source: XCUIElement) {
-        fatalError("This Robot can not be created this way")
+        fatalError("RunningRobot cannot be created with init(source:). Use init(configuration:context:current:previous:) instead.")
     }
 }
 

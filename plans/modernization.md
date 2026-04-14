@@ -76,9 +76,10 @@ public struct ElementSet<each T: RawRepresentable> where repeat (each T).RawValu
 
 ## Phase 7: Misc Cleanup
 
-- [ ] `try!` → proper error handling or `do/catch` with `XCTFail` in `XCUIApplication+Configuration.swift`
-- [ ] `RunningRobot.init(source:)` uses `fatalError` — replace with `@available(*, unavailable)`
-- [ ] Add actual unit tests for core types
+- [x] `try!` → proper error handling or `do/catch` with `XCTFail` in `XCUIApplication+Configuration.swift`
+- [x] `RunningRobot.init(source:)` — improved fatalError message (`@available(*, unavailable)` not viable: breaks `Robot` protocol conformance)
+- [x] `try!` → proper error handling in `DropBearSupport/TestConfiguration`
+- [x] Add actual unit tests for core types (23 tests across DropBearTests + DropBearSupportTests)
 
 ---
 
