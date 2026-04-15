@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public protocol Launchable { }
 

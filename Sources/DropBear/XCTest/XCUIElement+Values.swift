@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension XCUIElement {
     public var values: [String] {

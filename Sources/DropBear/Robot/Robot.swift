@@ -1,6 +1,7 @@
-import XCTest
+@preconcurrency import XCTest
 
 /// A `Robot` represents the actions that can be performed on a given screen
+@MainActor
 public protocol Robot {
     associatedtype Element: RawRepresentable = StringElement where Element.RawValue == String
 
@@ -12,7 +13,10 @@ public protocol Robot {
 extension Robot {
     /// Waits for the provided amount of time before continuing with the test
     public func wait(_ duration: TimeInterval) -> Self {
-        Thread.sleep(forTimeInterval: duration)
+        let deadline = Date(timeIntervalSinceNow: duration)
+        while Date() < deadline {
+            CFRunLoopRunInMode(.defaultMode, 0.01, true)
+        }
         return self
     }
 }
@@ -36,13 +40,14 @@ public class RestrictedRobotBase {
     }
 }
 
-public struct StringElement: RawRepresentable, ExpressibleByStringLiteral {
+public struct StringElement: RawRepresentable, ExpressibleByStringLiteral, Sendable {
     public let rawValue: String
     public init(rawValue: String) { self.rawValue = rawValue }
     public init(stringLiteral value: String) { self.rawValue = value }
 }
 
 extension RawRepresentable where RawValue == String {
+    @MainActor
     public func element(in source: XCUIElement, hierarchy: [XCUIElement.ElementType], file: StaticString, line: UInt) -> XCUIElement {
         return source.element(identifier: rawValue, in: hierarchy, file: file, line: line)
     }

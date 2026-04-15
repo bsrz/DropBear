@@ -1,10 +1,10 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension XCUIElement {
     public func element(
         identifier: String,
         in hierarchy: [XCUIElement.ElementType] = [.any],
-        file: StaticString = #file, function: String = #function, line: UInt = #line
+        file: StaticString = #filePath, function: String = #function, line: UInt = #line
         ) -> XCUIElement
     {
         guard let first = hierarchy.first else {

@@ -1,5 +1,12 @@
 # DropBear
 
+## Running Tests
+
+```sh
+scripts/run.sh unit   # Run SPM unit tests
+scripts/run.sh ui     # Run example app UI tests
+```
+
 ## Requirements
 
 *Coming soon*
@@ -8,11 +15,18 @@
 
 _Note: For information on installing `DropBearGen` or `DropBearSupport`, view their respective `README`s._
 
-### **Using CocoaPods**
-Simply add the following line to your **UI Test** target in your Podfile:
+### **Using Swift Package Manager**
 
-```ruby
-pod 'DropBear'
+Add DropBear to your project's **UI Test** target via Xcode:
+
+1. File → Add Package Dependencies
+2. Enter the repository URL
+3. Add `DropBear` to your UI Test target
+
+Or add it directly to your `Package.swift`:
+
+```swift
+.package(url: "<repository-url>", from: "1.0.0")
 ```
 
 ## Robots

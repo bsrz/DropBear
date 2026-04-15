@@ -1,9 +1,9 @@
-import XCTest
+@preconcurrency import XCTest
 
-public struct ContextElement<Context: RobotContext> {
-    let element: (XCUIElement) -> XCUIElement
+public struct ContextElement<Context: RobotContext>: @unchecked Sendable {
+    let element: @MainActor @Sendable (XCUIElement) -> XCUIElement
 
-    public init(element: @escaping (XCUIElement) -> XCUIElement) {
+    public init(element: @escaping @MainActor @Sendable (XCUIElement) -> XCUIElement) {
         self.element = element
     }
 }

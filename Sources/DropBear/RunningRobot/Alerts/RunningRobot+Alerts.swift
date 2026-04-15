@@ -1,10 +1,10 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension RunningRobot {
     public typealias ActiveAlertRobot<T: AlertButton> = AlertRobot<Alert<T>, RunningRobot<Configuration, Context, Current, Previous>>
 
-    public func alert<T: AlertButton>(_ alert: Alert<T>, required: Bool = true, file: StaticString = #file, line: UInt = #line) -> ActiveAlertRobot<T> {
-        let dialog = alert.source(source).alerts.firstMatch
+    public func alert<T: AlertButton>(_ alert: Alert<T>, required: Bool = true, file: StaticString = #filePath, line: UInt = #line) -> ActiveAlertRobot<T> {
+        let dialog = alert.dialog(alert.source(source))
         let actualDialog: XCUIElement
         if required {
             actualDialog = dialog.assert(.exists, alert.assertion, file: file, line: line)
@@ -17,7 +17,7 @@ extension RunningRobot {
 }
 
 extension AlertRobot {
-    public func tap(_ button: Alert.AlertButtonType, file: StaticString = #file, line: UInt = #line) -> Previous {
+    public func tap(_ button: Alert.AlertButtonType, file: StaticString = #filePath, line: UInt = #line) -> Previous {
         let element = button.buttonElement(from: alert)
 
         let actualElement: XCUIElement

@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension ContextElement where Context == NoContext {
     public static var navigationTitle: ContextElement {

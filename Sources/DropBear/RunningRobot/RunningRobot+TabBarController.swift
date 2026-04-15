@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 public protocol TabBarRobot: Robot { }
 
@@ -25,10 +25,10 @@ extension RunningRobot where Current: TabBarRobot {
         RunningRobot<Configuration, Context, Current, Previous>
     >
 
-    public struct TabItemAction {
-        let element: (_ tabBar: XCUIElement) -> XCUIElement
+    public struct TabItemAction: @unchecked Sendable {
+        let element: @MainActor @Sendable (_ tabBar: XCUIElement) -> XCUIElement
 
-        public static func tab(_ index: Int, file: StaticString = #file, line: UInt = #line) -> TabItemAction {
+        public static func tab(_ index: Int, file: StaticString = #filePath, line: UInt = #line) -> TabItemAction {
             return .init { tabBar in
                 if index < 0 || index >= tabBar.buttons.count {
                     XCTFail("Invalid tab index. Value should be between 0 and \(tabBar.buttons.count - 1)", file: file, line: line)
@@ -38,14 +38,15 @@ extension RunningRobot where Current: TabBarRobot {
             }
         }
 
-        public static func tab(_ element: Element, file: StaticString = #file, line: UInt = #line) -> TabItemAction {
+        public static func tab(_ element: Element, file: StaticString = #filePath, line: UInt = #line) -> TabItemAction {
+            let rawValue = element.rawValue
             return .init { tabBar in
-                return tabBar.buttons[element.rawValue]
+                return tabBar.buttons[rawValue]
             }
         }
     }
 
-    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, action: TabItemAction, file: StaticString = #file, line: UInt = #line) -> TabItemRobot<NavigationElement, Next> {
+    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, action: TabItemAction, file: StaticString = #filePath, line: UInt = #line) -> TabItemRobot<NavigationElement, Next> {
         DropBear.poll(until: { self.source.tabBars.firstMatch.buttons.count > 0 }, timeout: DropBear.defaultWaitTime)
 
         let tabBar = source.tabBars.firstMatch
@@ -63,7 +64,7 @@ extension RunningRobot where Current: TabBarRobot {
 }
 
 extension RunningRobot where Context: TabBarItemContext {
-    public func backToTabBarController(file: StaticString = #file, line: UInt = #line) -> Context.TabBar {
+    public func backToTabBarController(file: StaticString = #filePath, line: UInt = #line) -> Context.TabBar {
         return context.tabBar
     }
 }

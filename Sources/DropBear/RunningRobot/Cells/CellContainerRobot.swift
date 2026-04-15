@@ -1,30 +1,30 @@
-import XCTest
+@preconcurrency import XCTest
 
 public protocol CellContainerRobot: Robot { }
 
 extension RunningRobot: CellContainerRobot where Current: CellContainerRobot { }
 
 extension RunningRobot where Current: CellContainerRobot {
-    public func nextRobot<Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: RootAction, file: StaticString = #file, line: UInt = #line) -> RootRobot<Next> {
+    public func nextRobot<Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: RootAction, file: StaticString = #filePath, line: UInt = #line) -> RootRobot<Next> {
         return tap(cell: index, file: file, line: line).nextRobot(action: action)
     }
 
-    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: NavigationAction, file: StaticString = #file, line: UInt = #line) -> NavigationRobot<NavigationElement, Next> {
+    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: NavigationAction, file: StaticString = #filePath, line: UInt = #line) -> NavigationRobot<NavigationElement, Next> {
         return tap(cell: index, file: file, line: line).nextRobot(action: action)
     }
 
-    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: ModalAction, file: StaticString = #file, line: UInt = #line) -> ModalRobot<NavigationElement, Next> {
+    public func nextRobot<NavigationElement, Next: Robot>(_: Next.Type = Next.self, forCell index: Int, action: ModalAction, file: StaticString = #filePath, line: UInt = #line) -> ModalRobot<NavigationElement, Next> {
         return tap(cell: index, file: file, line: line).nextRobot(action: action)
     }
 }
 
 extension Robot where Self: CellContainerRobot {
-    public func tap(cell index: Int, file: StaticString = #file, line: UInt = #line) -> Self {
+    public func tap(cell index: Int, file: StaticString = #filePath, line: UInt = #line) -> Self {
         cell(index, file: file, line: line).tap()
         return self
     }
 
-    public func cell(_ index: Int, file: StaticString = #file, line: UInt = #line) -> XCUIElement {
+    public func cell(_ index: Int, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
         DropBear.poll(until: { source.cells.count > 0 }, timeout: DropBear.defaultWaitTime)
 
         if source.cells.count == 0 {

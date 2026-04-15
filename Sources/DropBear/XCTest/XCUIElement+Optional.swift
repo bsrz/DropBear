@@ -1,7 +1,7 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension XCUIElement {
-    public func required(file: StaticString = #file, line: UInt = #line) -> XCUIElement {
+    public func required(file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
         if !exists { XCTFail("Required element '\(identifier)' was not found", file: file, line: line) }
         return self
     }

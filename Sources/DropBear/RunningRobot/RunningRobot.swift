@@ -1,10 +1,10 @@
-import XCTest
+@preconcurrency import XCTest
 
-public protocol RobotContext { }
+public protocol RobotContext: Sendable { }
 
 public struct NoContext: RobotContext { }
 
-public struct NoConfiguration { }
+public struct NoConfiguration: Sendable { }
 
 public class RunningRobot<Configuration, Context: RobotContext, Current: Robot, Previous: Robot>: Robot {
     public typealias Element = Current.Element
@@ -24,7 +24,7 @@ public class RunningRobot<Configuration, Context: RobotContext, Current: Robot, 
     }
 
     public required convenience init(source: XCUIElement) {
-        fatalError("This Robot can not be created this way")
+        fatalError("RunningRobot cannot be created with init(source:). Use init(configuration:context:current:previous:) instead.")
     }
 }
 

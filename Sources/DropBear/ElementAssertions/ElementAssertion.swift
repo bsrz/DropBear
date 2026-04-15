@@ -1,11 +1,11 @@
-import XCTest
+@preconcurrency import XCTest
 
-public struct ElementAssertion {
+public struct ElementAssertion: @unchecked Sendable {
     let name: String
-    let assertion: (XCUIElement) -> Bool
+    let assertion: @MainActor @Sendable (XCUIElement) -> Bool
     let message: String?
 
-    public init(name: String, message: String? = nil, assertion: @escaping (XCUIElement) -> Bool) {
+    public init(name: String, message: String? = nil, assertion: @escaping @MainActor @Sendable (XCUIElement) -> Bool) {
         self.name = name
         self.assertion = assertion
         self.message = message

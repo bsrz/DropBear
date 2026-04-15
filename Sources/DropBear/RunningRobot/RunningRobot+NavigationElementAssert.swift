@@ -1,4 +1,4 @@
-import XCTest
+@preconcurrency import XCTest
 
 extension RunningRobot where Context: NavigationControllerContext, Context.NavigationElement: RawRepresentable, Context.NavigationElement.RawValue == String {
     @discardableResult
@@ -6,7 +6,7 @@ extension RunningRobot where Context: NavigationControllerContext, Context.Navig
         _ element: Context.NavigationElement,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(element, in: hierarchy, [assertion], file: file, line: line)
@@ -17,7 +17,7 @@ extension RunningRobot where Context: NavigationControllerContext, Context.Navig
         _ element: Context.NavigationElement,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertion: ElementAssertion, _ rest: ElementAssertion...,
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         return assert(element, in: hierarchy, [assertion] + rest, file: file, line: line)
@@ -28,7 +28,7 @@ extension RunningRobot where Context: NavigationControllerContext, Context.Navig
         _ element: Context.NavigationElement,
         in hierarchy: [XCUIElement.ElementType] = [.any],
         _ assertions: [ElementAssertion],
-        file: StaticString = #file, line: UInt = #line
+        file: StaticString = #filePath, line: UInt = #line
         ) -> Self
     {
         _ = element.element(in: source, hierarchy: hierarchy, file: file, line: line).assert(assertions, file: file, line: line)

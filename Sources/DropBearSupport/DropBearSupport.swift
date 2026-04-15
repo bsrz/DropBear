@@ -9,9 +9,9 @@ public struct TestConfiguration<T: Codable> {
     public let temporaryPath: URL
     public let config: T
 
-    init(in temporaryPath: URL) {
+    init(in temporaryPath: URL) throws {
         let configuration = temporaryPath.appendingPathComponent("configuration.json", isDirectory: false)
-        self.config =  try! JSONDecoder().decode(T.self, from: Data(contentsOf: configuration))
+        self.config = try JSONDecoder().decode(T.self, from: Data(contentsOf: configuration))
         self.temporaryPath = temporaryPath
     }
 
@@ -32,5 +32,10 @@ public func UITestConfiguration<T: Codable>(_: T.Type = T.self) -> TestConfigura
         return nil
     }
 
-    return TestConfiguration(in: URL(fileURLWithPath: folder))
+    do {
+        return try TestConfiguration(in: URL(fileURLWithPath: folder))
+    } catch {
+        print("Failed to load UI test configuration: \(error)")
+        return nil
+    }
 }
