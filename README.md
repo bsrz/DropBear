@@ -1,5 +1,12 @@
 # DropBear
 
+## Running Tests
+
+```sh
+scripts/run.sh unit   # Run SPM unit tests
+scripts/run.sh ui     # Run example app UI tests
+```
+
 ## Requirements
 
 *Coming soon*
