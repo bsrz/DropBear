@@ -29,22 +29,19 @@ extension Springboard.DeleteAppButton {
 
     public static var iOS18: Springboard.DeleteAppButton { iOS17 }
 
-    public static var iOS26: Springboard.DeleteAppButton {
+    public static var iOS26: Springboard.DeleteAppButton { .iOS26(duration: 3.5) }
+
+    /// iOS 26's context menu never fires "animation complete" and causes 60s delay on every interaction.
+    /// Using a longer press bring up the minus badge button for immediate deletion.
+    ///
+    /// - Parameter duration: The duration of the long press
+    /// - Returns: A springboard delete app button
+    public static func iOS26(duration: TimeInterval) -> Springboard.DeleteAppButton {
         return .init { application, icon in
-            icon.press(forDuration: 1.5)
-
-            let removeButton = application.buttons["Remove App"].firstMatch
-            guard removeButton.waitForExistence(timeout: DropBear.defaultWaitTime) && removeButton.isHittable else { return false }
-            removeButton.tap()
-
-            let deleteAppButton = application.buttons["Delete App"].firstMatch
-            guard deleteAppButton.waitForExistence(timeout: DropBear.defaultWaitTime) && deleteAppButton.isHittable else { return false }
-            deleteAppButton.tap()
-
-            let confirmButton = application.buttons["Delete"].firstMatch
-            guard confirmButton.waitForExistence(timeout: DropBear.defaultWaitTime) && confirmButton.isHittable else { return false }
-            confirmButton.tap()
-
+            icon.press(forDuration: duration)
+            icon.buttons["DeleteButton"].firstMatch.tap()
+            application.buttons["Delete App"].firstMatch.tap()
+            application.buttons["Delete"].firstMatch.tap()
             return true
         }
     }
